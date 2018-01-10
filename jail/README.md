@@ -130,7 +130,7 @@ Hahaha! Nobody will quess my new password! Only a few lucky souls have Escaped f
 
 ##### Generate wordlist and crack rar
 ```
-crunch 11 11 -t morris%%%%^ > wordlist
+crunch 11 11 -t Morris%%%%^ > wordlist
 ghost@intheshell:~/Downloads/jail$ ./crackrar.sh keys.rar wordlist 
 
 > trying "Morris1962!" 
